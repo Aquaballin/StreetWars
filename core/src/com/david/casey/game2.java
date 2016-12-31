@@ -51,7 +51,7 @@ public class game2 extends ApplicationAdapter {
 			public void call(Object... args) {
 				Gdx.app.log("SocketIO", "Connected");
 			}
-		}).on("SocketID", new Emitter.Listener() {
+		}).on("socketID", new Emitter.Listener() {
 			@Override
 			public void call(Object... args) {
 				JSONObject data = (JSONObject) args[0];
@@ -62,6 +62,19 @@ public class game2 extends ApplicationAdapter {
 					Gdx.app.log("SocketIO", "Error getting ID");
 				}
 			}
+		}).on("newPlayer", new Emitter.Listener(){
+			@Override
+			public void call(Object... args) {
+				JSONObject data = (JSONObject) args[0];
+				try {
+					String id = data.getString("id");
+					Gdx.app.log("SocketIO", "New Player Connect: " + id);}
+				catch (JSONException e){
+					Gdx.app.log("SocketIO", "Error getting new player id");
+				}
+			}
+
+
 		});
 	}
 }
