@@ -30,6 +30,9 @@ SQL LITE DATA BASE FOR PVE ACHEIVES
 
 public class game2 extends ApplicationAdapter {
 
+
+    private final float UPDATE_TIME = 1/60f;
+    float timer;
     SpriteBatch batch;
     Texture otherPlayerBug1Texture;
     Texture yourPlayerBug1Texture;
@@ -55,9 +58,14 @@ public class game2 extends ApplicationAdapter {
 
     @Override
     public void render() {
+
+        handleInput(Gdx.graphics.getDeltaTime());
+        updateServer(Gdx.graphics.getDeltaTime());
+
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        handleInput(Gdx.graphics.getDeltaTime());
+
+
         batch.begin();
         if (yourRedBug != null) {
             yourRedBug.draw(batch);
@@ -90,6 +98,20 @@ public class game2 extends ApplicationAdapter {
                 yourRedBug.setPosition(yourRedBug.getX() + (-200 * deltaTime), yourRedBug.getY());
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 yourRedBug.setPosition(yourRedBug.getX() + (+200 * deltaTime), yourRedBug.getY());
+            }
+        }
+    }
+
+    public void updateServer(float deltaTime) {
+        timer += timer;
+        if (timer >= UPDATE_TIME && yourRedBug != null && yourRedBug.hasMoved()) {
+            JSONObject data = new JSONObject();
+            try {
+                data.put("x",yourRedBug.getX());
+                data.put("y",yourRedBug.getY());
+                socket.emit("playerMoved",data);
+            } catch (JSONException e) {
+                Gdx.app.log("SOCKET.IO", "Error sending update data");
             }
         }
     }
@@ -152,6 +174,7 @@ public class game2 extends ApplicationAdapter {
                     }
                 } catch (Exception e) {
                     Gdx.app.log("SocketIO", "something is wrong");
+                    e.printStackTrace();
 
                 }
             }

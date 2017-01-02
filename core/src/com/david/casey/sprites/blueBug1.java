@@ -13,7 +13,7 @@ public class blueBug1 extends Sprite {
 
     public blueBug1(Texture texture) {
         super(texture);
-        previousPosition = new Vector2(getY(),getX());
+        previousPosition = new Vector2(getX(),getY());
 
     }
     public boolean hasMoved() {
