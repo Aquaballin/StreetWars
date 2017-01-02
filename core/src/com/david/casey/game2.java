@@ -7,13 +7,26 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+
+import com.badlogic.gdx.math.Vector2;
 import com.david.casey.sprites.*;
+
+import java.util.HashMap;
+
+/*
+BUM FIGHTING GAME THAT HAS A PVE MODE AND PVP ARENA MODE?
+SQL LITE DATA BASE FOR PVE ACHEIVES
+
+
+
+ */
 
 public class game2 extends ApplicationAdapter {
 
@@ -23,6 +36,8 @@ public class game2 extends ApplicationAdapter {
     private Socket socket;
     redBug1 yourRedBug;
     blueBug1 theirBlueBug;
+    HashMap<String, blueBug1> otherPlayers;
+
 
 
 
@@ -32,6 +47,7 @@ public class game2 extends ApplicationAdapter {
         batch = new SpriteBatch();
         yourPlayerBug1Texture = new Texture("redBug0.png");
         otherPlayerBug1Texture = new Texture("blueBug0.png");
+        otherPlayers = new HashMap<String, blueBug1>();
         connectSocket();
         configSocketEvents();
 
@@ -45,6 +61,9 @@ public class game2 extends ApplicationAdapter {
         batch.begin();
         if (yourRedBug != null) {
             yourRedBug.draw(batch);
+        }
+        for (HashMap.Entry<String, blueBug1> entry : otherPlayers.entrySet()) {
+            entry.getValue().draw(batch);
         }
         batch.end();
     }
@@ -80,7 +99,7 @@ public class game2 extends ApplicationAdapter {
             @Override
             public void call(Object... args) {
                 Gdx.app.log("SocketIO", "Connected");
-                yourRedBug = new redBug1(yourPlayerBug1);
+                yourRedBug = new redBug1(yourPlayerBug1Texture);
             }
         }).on("socketID", new Emitter.Listener() {
             @Override
@@ -100,12 +119,42 @@ public class game2 extends ApplicationAdapter {
                 try {
                     String id = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connect: " + id);
+                    otherPlayers.put(id,new blueBug1(otherPlayerBug1Texture));
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting new player id");
                 }
             }
 
 
+        }).on("playerDisconnected", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String id = data.getString("id");
+                    otherPlayers.remove(id);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting new player id");
+                }
+            }
+        }).on("getPlayers", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONArray objects = (JSONArray) args[0];
+                try {
+                    for (int i = 0; i < objects.length(); i++) {
+                        blueBug1 otherPlayer = new blueBug1(otherPlayerBug1Texture);
+                        Vector2 position = new Vector2();
+                        position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                        position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                        otherPlayer.setPosition(position.x,position.y);
+                        otherPlayers.put(objects.getJSONObject(i).getString("id"),otherPlayer);
+                    }
+                } catch (Exception e) {
+                    Gdx.app.log("SocketIO", "something is wrong");
+
+                }
+            }
         });
     }
 }
