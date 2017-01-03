@@ -62,7 +62,7 @@ public class game2 extends ApplicationAdapter {
         handleInput(Gdx.graphics.getDeltaTime());
         updateServer(Gdx.graphics.getDeltaTime());
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -139,9 +139,9 @@ public class game2 extends ApplicationAdapter {
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
                 try {
-                    String id = data.getString("id");
-                    Gdx.app.log("SocketIO", "New Player Connect: " + id);
-                    otherPlayers.put(id,new blueBug1(otherPlayerBug1Texture));
+                    String playerId = data.getString("id");
+                    Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
+                    otherPlayers.put(playerId,new blueBug1(otherPlayerBug1Texture));
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting new player id");
                 }
@@ -176,6 +176,21 @@ public class game2 extends ApplicationAdapter {
                     Gdx.app.log("SocketIO", "something is wrong");
                     e.printStackTrace();
 
+                }
+            }
+        }).on("playerMoved", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerId = data.getString("id");
+                    Double x = data.getDouble("x");
+                    Double y = data.getDouble("y");
+                    if (otherPlayers.get(playerId) != null) {
+                        otherPlayers.get(playerId).setPosition(x.floatValue(),y.floatValue());
+                    }
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting player movements");
                 }
             }
         });
