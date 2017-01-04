@@ -20,9 +20,13 @@ import com.david.casey.sprites.*;
 
 import java.util.HashMap;
 
+/*
+
+Fast placed multiplayer
+http://www.gabrielgambetta.com/fpm1.html
+ */
 
 public class Game extends ApplicationAdapter {
-
 
     private final float UPDATE_TIME = 1/60f;
     float timer;
@@ -36,12 +40,11 @@ public class Game extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        yourPlayerTexture = new Texture("homelessGuy1.png");
-        otherPlayerTexture = new Texture("homelessGuy2.png");
+        yourPlayerTexture = new Texture("starterHomelessGuy1.png");
+        otherPlayerTexture = new Texture("starterHomelessGuy2.png");
         otherPlayers = new HashMap<String, theirHomelessGuy>();
         connectSocket();
         configSocketEvents();
-
     }
 
     @Override
