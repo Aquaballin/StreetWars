@@ -28,18 +28,18 @@ SQL LITE DATA BASE FOR PVE ACHEIVES
 
  */
 
-public class game2 extends ApplicationAdapter {
+public class Game extends ApplicationAdapter {
 
 
     private final float UPDATE_TIME = 1/60f;
     float timer;
     SpriteBatch batch;
-    Texture otherPlayerBug1Texture;
-    Texture yourPlayerBug1Texture;
+    Texture otherPlayerTexture;
+    Texture yourPlayerTexture;
     private Socket socket;
-    redBug1 yourRedBug;
-    blueBug1 theirBlueBug;
-    HashMap<String, blueBug1> otherPlayers;
+    yourHomelessGuy yourRedBug;
+
+    HashMap<String, theirHomelessGuy> otherPlayers;
 
 
 
@@ -48,9 +48,9 @@ public class game2 extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        yourPlayerBug1Texture = new Texture("redBug0.png");
-        otherPlayerBug1Texture = new Texture("blueBug0.png");
-        otherPlayers = new HashMap<String, blueBug1>();
+        yourPlayerTexture = new Texture("homelessGuy1.png");
+        otherPlayerTexture = new Texture("homelessGuy2.png");
+        otherPlayers = new HashMap<String, theirHomelessGuy>();
         connectSocket();
         configSocketEvents();
 
@@ -62,7 +62,7 @@ public class game2 extends ApplicationAdapter {
         handleInput(Gdx.graphics.getDeltaTime());
         updateServer(Gdx.graphics.getDeltaTime());
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0,0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -70,7 +70,7 @@ public class game2 extends ApplicationAdapter {
         if (yourRedBug != null) {
             yourRedBug.draw(batch);
         }
-        for (HashMap.Entry<String, blueBug1> entry : otherPlayers.entrySet()) {
+        for (HashMap.Entry<String, theirHomelessGuy> entry : otherPlayers.entrySet()) {
             entry.getValue().draw(batch);
         }
         batch.end();
@@ -78,8 +78,8 @@ public class game2 extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        yourPlayerBug1Texture.dispose();
-        otherPlayerBug1Texture.dispose();
+        yourPlayerTexture.dispose();
+        otherPlayerTexture.dispose();
         super.dispose();
     }
 
@@ -103,7 +103,7 @@ public class game2 extends ApplicationAdapter {
     }
 
     public void updateServer(float deltaTime) {
-        timer += timer;
+        timer += deltaTime;
         if (timer >= UPDATE_TIME && yourRedBug != null && yourRedBug.hasMoved()) {
             JSONObject data = new JSONObject();
             try {
@@ -121,7 +121,7 @@ public class game2 extends ApplicationAdapter {
             @Override
             public void call(Object... args) {
                 Gdx.app.log("SocketIO", "Connected");
-                yourRedBug = new redBug1(yourPlayerBug1Texture);
+                yourRedBug = new yourHomelessGuy(yourPlayerTexture);
             }
         }).on("socketID", new Emitter.Listener() {
             @Override
@@ -141,7 +141,7 @@ public class game2 extends ApplicationAdapter {
                 try {
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
-                    otherPlayers.put(playerId,new blueBug1(otherPlayerBug1Texture));
+                    otherPlayers.put(playerId,new theirHomelessGuy(otherPlayerTexture));
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting new player id");
                 }
@@ -165,7 +165,7 @@ public class game2 extends ApplicationAdapter {
                 JSONArray objects = (JSONArray) args[0];
                 try {
                     for (int i = 0; i < objects.length(); i++) {
-                        blueBug1 otherPlayer = new blueBug1(otherPlayerBug1Texture);
+                        theirHomelessGuy otherPlayer = new theirHomelessGuy(otherPlayerTexture);
                         Vector2 position = new Vector2();
                         position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
                         position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();

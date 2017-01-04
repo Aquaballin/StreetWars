@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Vector2;
  * Created by David on 12/31/2016.
  */
 
-public class blueBug1 extends Sprite {
+public class theirHomelessGuy extends Sprite {
     Vector2 previousPosition;
 
-    public blueBug1(Texture texture) {
+    public theirHomelessGuy(Texture texture) {
         super(texture);
         previousPosition = new Vector2(getX(),getY());
 
