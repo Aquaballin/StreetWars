@@ -20,13 +20,6 @@ import com.david.casey.sprites.*;
 
 import java.util.HashMap;
 
-/*
-BUM FIGHTING GAME THAT HAS A PVE MODE AND PVP ARENA MODE?
-SQL LITE DATA BASE FOR PVE ACHEIVES
-
-
-
- */
 
 public class Game extends ApplicationAdapter {
 
@@ -37,13 +30,8 @@ public class Game extends ApplicationAdapter {
     Texture otherPlayerTexture;
     Texture yourPlayerTexture;
     private Socket socket;
-    yourHomelessGuy yourRedBug;
-
+    yourHomelessGuy yourHomelessGuy;
     HashMap<String, theirHomelessGuy> otherPlayers;
-
-
-
-
 
     @Override
     public void create() {
@@ -62,13 +50,13 @@ public class Game extends ApplicationAdapter {
         handleInput(Gdx.graphics.getDeltaTime());
         updateServer(Gdx.graphics.getDeltaTime());
 
-        Gdx.gl.glClearColor(0,0, 0, 1);
+        Gdx.gl.glClearColor(255,255,255,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
         batch.begin();
-        if (yourRedBug != null) {
-            yourRedBug.draw(batch);
+        if (yourHomelessGuy != null) {
+            yourHomelessGuy.draw(batch);
         }
         for (HashMap.Entry<String, theirHomelessGuy> entry : otherPlayers.entrySet()) {
             entry.getValue().draw(batch);
@@ -93,22 +81,22 @@ public class Game extends ApplicationAdapter {
     }
 
     public void handleInput(float deltaTime) {
-        if (yourRedBug != null) {
+        if (yourHomelessGuy != null) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                yourRedBug.setPosition(yourRedBug.getX() + (-200 * deltaTime), yourRedBug.getY());
+                yourHomelessGuy.setPosition(yourHomelessGuy.getX() + (-200 * deltaTime), yourHomelessGuy.getY());
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                yourRedBug.setPosition(yourRedBug.getX() + (+200 * deltaTime), yourRedBug.getY());
+                yourHomelessGuy.setPosition(yourHomelessGuy.getX() + (+200 * deltaTime), yourHomelessGuy.getY());
             }
         }
     }
 
     public void updateServer(float deltaTime) {
         timer += deltaTime;
-        if (timer >= UPDATE_TIME && yourRedBug != null && yourRedBug.hasMoved()) {
+        if (timer >= UPDATE_TIME && yourHomelessGuy != null && yourHomelessGuy.hasMoved()) {
             JSONObject data = new JSONObject();
             try {
-                data.put("x",yourRedBug.getX());
-                data.put("y",yourRedBug.getY());
+                data.put("x", yourHomelessGuy.getX());
+                data.put("y", yourHomelessGuy.getY());
                 socket.emit("playerMoved",data);
             } catch (JSONException e) {
                 Gdx.app.log("SOCKET.IO", "Error sending update data");
@@ -121,7 +109,7 @@ public class Game extends ApplicationAdapter {
             @Override
             public void call(Object... args) {
                 Gdx.app.log("SocketIO", "Connected");
-                yourRedBug = new yourHomelessGuy(yourPlayerTexture);
+                yourHomelessGuy = new yourHomelessGuy(yourPlayerTexture);
             }
         }).on("socketID", new Emitter.Listener() {
             @Override
