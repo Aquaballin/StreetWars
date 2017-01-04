@@ -26,7 +26,7 @@ Fast placed multiplayer
 http://www.gabrielgambetta.com/fpm1.html
  */
 
-public class Game extends ApplicationAdapter {
+public class GameClass extends ApplicationAdapter {
 
     private final float UPDATE_TIME = 1/60f;
     float timer;
