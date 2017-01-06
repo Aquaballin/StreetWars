@@ -1,89 +1,92 @@
-package com.david.casey;
+package com.david.casey.screens;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.Game;
-import com.david.casey.screens.*;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.david.casey.GameClass;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-
-import com.badlogic.gdx.math.Vector2;
-import com.david.casey.sprites.*;
-
-import java.util.HashMap;
-import com.david.casey.scenes.*;
-
-/*
-
-Fast placed multiplayer
-http://www.gabrielgambetta.com/fpm1.html
+/**
+ * Created by David on 1/4/2017.
  */
 
-public class GameClass extends Game {
+public class ShittyPetesWharfScreen implements Screen {
+    //reference the game
+    private GameClass gameClass;
+    private TextureAtlas yourTextureAtlas;
 
-    @Override
-    public void create() {
-        setScreen(new MenuScreen(this));
+    //variables for this screen
+    private OrthographicCamera orthographicCamera;
+    private Viewport viewport;
+    // add this -> private Hud hud;
 
-        /*
-        batch = new SpriteBatch();
-        yourPlayerTexture = new Texture("starterHomelessGuy1.png");
-        otherPlayerTexture = new Texture("starterHomelessGuy2.png");
-        otherPlayers = new HashMap<String, theirHomelessGuy>();
-        connectSocket();
-        configSocketEvents();
-        */
+    //tiled map variables
+    private TmxMapLoader tmxMapLoader;
+    private TiledMap tiledMap;
+    OrthoCachedTiledMapRenderer orthoCachedTiledMapRenderer;
+
+    //box2d physics variables
+    private World world;
+    private Box2DDebugRenderer b2dr;
+    // add this -> private B2
+
+    public ShittyPetesWharfScreen(GameClass gameClass) {
+        //yourTextureAtlas = new TextureAtlas()
+        this.gameClass = gameClass;
+        orthographicCamera = new OrthographicCamera();
+
+        //
+
+
+
     }
 
-    public GameClass() {
-        super();
+
+
+
+    @Override
+    public void show() {
+
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
+    public void render(float delta) {
 
-    @Override
-    public void pause() {
-        super.pause();
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
-    }
-
-    @Override
-    public void render() {
-        super.render();
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+
     }
 
     @Override
-    public void setScreen(Screen screen) {
-        super.setScreen(screen);
+    public void pause() {
+
     }
 
     @Override
-    public Screen getScreen() {
-        return super.getScreen();
+    public void resume() {
+
     }
 
-    /*
-    private final float UPDATE_TIME = 1/60f;
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+}
+
+/*
+ private final float UPDATE_TIME = 1/60f;
     float timer;
     SpriteBatch batch;
     Texture otherPlayerTexture;
@@ -91,11 +94,16 @@ public class GameClass extends Game {
     private Socket socket;
     yourHomelessGuy yourHomelessGuy;
     HashMap<String, theirHomelessGuy> otherPlayers;
-    */
 
-
-
-    /*
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
+        yourPlayerTexture = new Texture("starterHomelessGuy1.png");
+        otherPlayerTexture = new Texture("starterHomelessGuy2.png");
+        otherPlayers = new HashMap<String, theirHomelessGuy>();
+        connectSocket();
+        configSocketEvents();
+    }
 
     @Override
     public void render() {
@@ -236,5 +244,4 @@ public class GameClass extends Game {
             }
         });
     }
-    */
-}
+ */
