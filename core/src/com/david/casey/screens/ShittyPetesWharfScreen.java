@@ -46,9 +46,6 @@ public class ShittyPetesWharfScreen implements Screen {
 
     }
 
-
-
-
     @Override
     public void show() {
 

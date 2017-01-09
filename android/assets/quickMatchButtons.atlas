@@ -1,0 +1,19 @@
+
+quickMatchButtons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+QuickmatchButton_UP
+  rotate: false
+  xy: 1, 1
+  size: 104, 58
+  orig: 104, 58
+  offset: 0, 0
+  index: -1
+QuickmatchButton_DOWN
+  rotate: false
+  xy: 107, 1
+  size: 104, 58
+  orig: 104, 58
+  offset: 0, 0
+  index: -1
