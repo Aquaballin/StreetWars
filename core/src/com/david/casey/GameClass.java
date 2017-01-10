@@ -28,9 +28,11 @@ http://www.gabrielgambetta.com/fpm1.html
  */
 
 public class GameClass extends Game {
+    public SpriteBatch batch;
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
         setScreen(new MenuScreen(this));
 
         /*
@@ -49,6 +51,7 @@ public class GameClass extends Game {
 
     @Override
     public void dispose() {
+        batch.dispose();
         super.dispose();
     }
 

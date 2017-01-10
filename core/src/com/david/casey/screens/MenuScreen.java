@@ -14,6 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.david.casey.GameClass;
 
 
@@ -23,9 +27,14 @@ import com.david.casey.GameClass;
 
 public class MenuScreen implements Screen {
 
+    private GameClass game;
+
     private Texture background;
-    private SpriteBatch batch;
+    //private SpriteBatch batch;
     private OrthographicCamera orthographicCamera;
+    private Viewport viewport;
+
+
 
 
     //to make the buttons as actors you can add a button that is an actor to a stage?
@@ -38,10 +47,13 @@ public class MenuScreen implements Screen {
     TextButton.TextButtonStyle textButtonStyle;
 
 
-    public MenuScreen(final GameClass gameClass) {
+    public MenuScreen(final GameClass game) {
+        this.game = game;
         orthographicCamera = new OrthographicCamera();
-        orthographicCamera.setToOrtho(false, 800, 480);
-        batch = new SpriteBatch();
+        viewport = new FitViewport(512,1024,orthographicCamera);
+        orthographicCamera.setToOrtho(false, 0, 0);
+        orthographicCamera.position.set(0,0,0);
+        game.batch = new SpriteBatch();
         background = new Texture(Gdx.files.internal("MenuScreen.png"));
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -59,7 +71,7 @@ public class MenuScreen implements Screen {
         quickMatchButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameClass.setScreen(new CharacterSelectionScreen());
+                game.setScreen(new CharacterSelectionScreen());
             }
         });
     }
@@ -76,22 +88,27 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        orthographicCamera.update();
-        batch.enableBlending();
-        batch.begin();
 
-        batch.draw(background,0,0);
+        Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.batch.setProjectionMatrix(orthographicCamera.combined);
+
+        orthographicCamera.update();
+        game.batch.enableBlending();
+
+
+        game.batch.begin();
+
+        game.batch.draw(background,0,0);
         stage.draw();
 
-        batch.end();
-
+        game.batch.end();
 
     }
 
     @Override
     public void resize(int width, int height) {
-
+       viewport.update(width, height);
     }
 
     @Override
@@ -111,7 +128,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
+        game.batch.dispose();
         stage.dispose();
     }
 }
