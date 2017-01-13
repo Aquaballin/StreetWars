@@ -29,6 +29,10 @@ http://www.gabrielgambetta.com/fpm1.html
 
 public class GameClass extends Game {
     public SpriteBatch batch;
+    public static final int MENU_STATE_WIDTH = 480;
+    public static final int MENU_STATE_HEIGHT = 800;
+
+    public static final float PPM = 100;
 
     @Override
     public void create() {

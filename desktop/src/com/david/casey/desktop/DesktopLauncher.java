@@ -7,8 +7,8 @@ import com.david.casey.GameClass;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 450;
-		config.height = 800;
+		config.width = 288;
+		config.height = 512;
 		new LwjglApplication(new GameClass(), config);
 	}
 }

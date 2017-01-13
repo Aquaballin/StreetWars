@@ -1,5 +1,6 @@
 package com.david.casey.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,11 +29,11 @@ import com.david.casey.GameClass;
 public class MenuScreen implements Screen {
 
     private GameClass game;
-
     private Texture background;
-    //private SpriteBatch batch;
-    private OrthographicCamera orthographicCamera;
     private Viewport viewport;
+    private OrthographicCamera orthographicCamera;
+
+
 
 
 
@@ -48,26 +49,39 @@ public class MenuScreen implements Screen {
 
 
     public MenuScreen(final GameClass game) {
+        //1. initialize game class
         this.game = game;
+        //2. make a camera with an orthographic projection of a plane
         orthographicCamera = new OrthographicCamera();
-        viewport = new FitViewport(512,1024,orthographicCamera);
-        orthographicCamera.setToOrtho(false, 0, 0);
-        orthographicCamera.position.set(0,0,0);
+        //3. create a FitViewport to maintain virtual aspect ratio despite screen size
+        orthographicCamera.setToOrtho(false, GameClass.MENU_STATE_WIDTH , GameClass.MENU_STATE_HEIGHT );
+        //3. create a FitViewport to maintain virtual aspect ratio despite screen size
+        //this.viewport = new FitViewport(GameClass.MENU_STATE_WIDTH / 2, GameClass.MENU_STATE_HEIGHT / 2, orthographicCamera);
+        //
+
+
+        //orthographicCamera.position.set(0,0,0);
+
         game.batch = new SpriteBatch();
+
         background = new Texture(Gdx.files.internal("MenuScreen.png"));
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+
+        //stage = new Stage(new FitViewport(288,512));
+
+        //Gdx.input.setInputProcessor(stage);
+
         bitmapFont = new BitmapFont();
+
         skin = new Skin();
+
         quickMatchTextureAtlas = new TextureAtlas(Gdx.files.internal("quickMatchButtons.atlas"));
         skin.addRegions(quickMatchTextureAtlas);
         textButtonStyle= new TextButton.TextButtonStyle();
         textButtonStyle.font = bitmapFont;
-
         textButtonStyle.up = skin.getDrawable("QuickmatchButton_UP");
         textButtonStyle.down = skin.getDrawable("QuickmatchButton_DOWN");
         quickMatchButton = new TextButton("", textButtonStyle);
-        stage.addActor(quickMatchButton);
+        //stage.addActor(quickMatchButton);
         quickMatchButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -88,27 +102,25 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        //cryptic code that is required
         Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        game.batch.setProjectionMatrix(orthographicCamera.combined);
 
+
+        //game.batch.setProjectionMatrix(orthographicCamera.combined);
         orthographicCamera.update();
-        game.batch.enableBlending();
-
-
+        //game.batch.enableBlending();
         game.batch.begin();
-
-        game.batch.draw(background,0,0);
-        stage.draw();
-
+        game.batch.draw(background,0,0); //,GameClass.MENU_STATE_WIDTH,GameClass.MENU_STATE_HEIGHT);
+        //stage.draw();
         game.batch.end();
 
     }
 
     @Override
     public void resize(int width, int height) {
-       viewport.update(width, height);
+        //viewport.update(width, height);
+       // stage.getViewport().update(width, height);
     }
 
     @Override
@@ -129,6 +141,6 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
         game.batch.dispose();
-        stage.dispose();
+        //stage.dispose();
     }
 }
