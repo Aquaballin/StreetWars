@@ -112,6 +112,7 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new CharacterSelectionScreen());
+                dispose();
             }
         });
     }
@@ -181,5 +182,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         game.batch.dispose();
         stage.dispose();
+        buttonBatch.dispose();
     }
 }
