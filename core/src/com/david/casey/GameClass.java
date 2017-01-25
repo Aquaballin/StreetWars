@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 public class GameClass extends Game {
+    public GoogleApiClient googleApiClient;
     public SpriteBatch batch;
     public static final int MENU_STATE_WIDTH = 512;
     public static final int MENU_STATE_HEIGHT = 288;
