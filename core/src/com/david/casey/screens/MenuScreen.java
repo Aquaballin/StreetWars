@@ -49,7 +49,6 @@ public class MenuScreen implements Screen {
      * buttons size is 104x58
      *******************************************************************************/
     public MenuScreen(final GameClass game) {
-
         //1. initialize game class
         this.game = game;
         //2. make a camera with an orthographic projection of a plane

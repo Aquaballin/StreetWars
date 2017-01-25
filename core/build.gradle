@@ -11,6 +11,7 @@ eclipse.project {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-base:10.0.1'
+
     compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.android.gms:play-services-base:10.0.1'
 }
